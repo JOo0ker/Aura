@@ -4,6 +4,7 @@
 #include "Player/AuraPlayerController.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "UI/HUD/AuraHUD.h"
 #include "Interaction/EnemyInterface.h"
 
 
@@ -58,6 +59,14 @@ void AAuraPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	check(AuraContext);
+	
+	if (!IsLocalController())
+	{
+		if (HUDClass)
+		{
+			ClientSetHUD(HUDClass);
+		}
+	}
 
 	if (const auto Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
@@ -77,7 +86,7 @@ void AAuraPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	auto EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
+	const auto EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
 
 	EnhancedInputComponent->BindAction(
 		MoveAction, ETriggerEvent::Triggered,
@@ -86,7 +95,7 @@ void AAuraPlayerController::SetupInputComponent()
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 {
-	const auto InpuAxisVector = InputActionValue.Get<FVector2D>();
+	const auto InputAxisVector = InputActionValue.Get<FVector2D>();
 	const FRotator Rotation = GetControlRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
 
@@ -95,7 +104,20 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 
 	if (const auto ControlledPawn = GetPawn<APawn>())
 	{
-		ControlledPawn->AddMovementInput(ForwardDirection, InpuAxisVector.Y);
-		ControlledPawn->AddMovementInput(RightDirection, InpuAxisVector.X);
+		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
+		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("-----------------------\n"));
+
+	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
+	{
+		APlayerController* PC = It->Get();
+		if (PC && PC->Player)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Role: %s, Player: %s"), PC->HasAuthority() ? TEXT("Server") : TEXT("Client"), *PC->GetName());
+			UE_LOG(LogTemp, Warning, TEXT("PlayerController BeginPlay - IsServer: %d, IsLocalController: %d"), PC->HasAuthority(), PC->IsLocalController());
+			UE_LOG(LogTemp, Warning, TEXT("Mode: %d"), PC->GetNetMode());
+		}
 	}
 }

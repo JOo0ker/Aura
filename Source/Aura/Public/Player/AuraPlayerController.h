@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "AuraPlayerController.generated.h"
 
+class AAuraHUD;
 class IEnemyInterface;
 struct FInputActionValue;
 class UInputMappingContext;
@@ -34,6 +35,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> MoveAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "HUD")
+	TSubclassOf<AAuraHUD> HUDClass;
 
 	void Move(const FInputActionValue& InputActionValue);
 
