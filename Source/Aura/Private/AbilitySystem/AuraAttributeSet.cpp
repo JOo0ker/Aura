@@ -10,17 +10,17 @@ UAuraAttributeSet::UAuraAttributeSet()
 	InitHealth(70.f);
 	InitMaxHealth(100.f);
 	InitMana(73.f);
-	InitMaxMana(98.f);
+	InitMaxMana(99.f);
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	AURA_ATTRIBUTE_NOTIFY(Health)
-	AURA_ATTRIBUTE_NOTIFY(MaxHealth)
-	AURA_ATTRIBUTE_NOTIFY(Mana)
-	AURA_ATTRIBUTE_NOTIFY(MaxMana)
+	AURA_ATTRIBUTE_NOTIFY(Health);
+	AURA_ATTRIBUTE_NOTIFY(MaxHealth);
+	AURA_ATTRIBUTE_NOTIFY(Mana);
+	AURA_ATTRIBUTE_NOTIFY(MaxMana);
 }
 
 AURA_ATTRIBUTE_IMPL(Health)

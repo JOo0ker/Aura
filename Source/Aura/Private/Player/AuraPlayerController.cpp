@@ -59,14 +59,6 @@ void AAuraPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	check(AuraContext);
-	
-	if (!IsLocalController())
-	{
-		if (HUDClass)
-		{
-			ClientSetHUD(HUDClass);
-		}
-	}
 
 	if (const auto Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
@@ -106,18 +98,5 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 	{
 		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
 		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
-	}
-
-	UE_LOG(LogTemp, Warning, TEXT("-----------------------\n"));
-
-	for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
-	{
-		APlayerController* PC = It->Get();
-		if (PC && PC->Player)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Role: %s, Player: %s"), PC->HasAuthority() ? TEXT("Server") : TEXT("Client"), *PC->GetName());
-			UE_LOG(LogTemp, Warning, TEXT("PlayerController BeginPlay - IsServer: %d, IsLocalController: %d"), PC->HasAuthority(), PC->IsLocalController());
-			UE_LOG(LogTemp, Warning, TEXT("Mode: %d"), PC->GetNetMode());
-		}
 	}
 }
