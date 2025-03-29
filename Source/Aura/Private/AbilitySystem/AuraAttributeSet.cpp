@@ -45,20 +45,30 @@ void FEffectProperties::SetEffectProperties(const FGameplayEffectModCallbackData
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
-	InitHealth(70.f);
-	InitMaxHealth(100.f);
-	InitMana(73.f);
-	InitMaxMana(99.f);
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	AURA_ATTRIBUTE_NOTIFY(Health);
+	AURA_ATTRIBUTE_NOTIFY(Strength)
+	AURA_ATTRIBUTE_NOTIFY(Intelligence)
+	AURA_ATTRIBUTE_NOTIFY(Resilience)
+	AURA_ATTRIBUTE_NOTIFY(Vigor)
+
+	AURA_ATTRIBUTE_NOTIFY(Armor)
+	AURA_ATTRIBUTE_NOTIFY(ArmorPenetration)
+	AURA_ATTRIBUTE_NOTIFY(BlockChance)
+	AURA_ATTRIBUTE_NOTIFY(CriticalHitChance)
+	AURA_ATTRIBUTE_NOTIFY(CriticalHitDamage)
+	AURA_ATTRIBUTE_NOTIFY(CriticalHitResistance)
+	AURA_ATTRIBUTE_NOTIFY(HealthRegeneration)
+	AURA_ATTRIBUTE_NOTIFY(ManaRegeneration)
 	AURA_ATTRIBUTE_NOTIFY(MaxHealth);
-	AURA_ATTRIBUTE_NOTIFY(Mana);
 	AURA_ATTRIBUTE_NOTIFY(MaxMana);
+	
+	AURA_ATTRIBUTE_NOTIFY(Health);
+	AURA_ATTRIBUTE_NOTIFY(Mana);
 }
 
 void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -82,9 +92,34 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 
 	FEffectProperties Props;
 	Props.SetEffectProperties(Data);
+
+	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	{
+		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
+	}
+	if (Data.EvaluatedData.Attribute == GetManaAttribute())
+	{
+		SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
+	}
 }
 
-AURA_ATTRIBUTE_IMPL(Health)
+AURA_ATTRIBUTE_IMPL(Strength)
+AURA_ATTRIBUTE_IMPL(Intelligence)
+AURA_ATTRIBUTE_IMPL(Resilience)
+AURA_ATTRIBUTE_IMPL(Vigor)
+
+AURA_ATTRIBUTE_IMPL(Armor)
+AURA_ATTRIBUTE_IMPL(ArmorPenetration)
+AURA_ATTRIBUTE_IMPL(BlockChance)
+AURA_ATTRIBUTE_IMPL(CriticalHitChance)
+AURA_ATTRIBUTE_IMPL(CriticalHitDamage)
+AURA_ATTRIBUTE_IMPL(CriticalHitResistance)
+AURA_ATTRIBUTE_IMPL(HealthRegeneration)
+AURA_ATTRIBUTE_IMPL(ManaRegeneration)
 AURA_ATTRIBUTE_IMPL(MaxHealth)
-AURA_ATTRIBUTE_IMPL(Mana)
 AURA_ATTRIBUTE_IMPL(MaxMana)
+
+
+AURA_ATTRIBUTE_IMPL(Health)
+AURA_ATTRIBUTE_IMPL(Mana)
+
