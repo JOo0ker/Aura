@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "AuraGamePlayTags.h"
 #include "GameplayEffectExtension.h"
 #include "GameFramework/Character.h"
 
@@ -45,6 +46,24 @@ void FEffectProperties::SetEffectProperties(const FGameplayEffectModCallbackData
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
+	// ReSharper disable once CppUseStructuredBinding
+	const auto& GameplayTags = FAuraGameplayTags::Get();
+
+	AURA_ATTRIBUTE_MAP_ADD(Primary, Strength);
+	AURA_ATTRIBUTE_MAP_ADD(Primary, Intelligence);
+	AURA_ATTRIBUTE_MAP_ADD(Primary, Resilience);
+	AURA_ATTRIBUTE_MAP_ADD(Primary, Vigor);
+
+	AURA_ATTRIBUTE_MAP_ADD(Secondary, Armor)
+	AURA_ATTRIBUTE_MAP_ADD(Secondary, ArmorPenetration)
+	AURA_ATTRIBUTE_MAP_ADD(Secondary, BlockChance)
+	AURA_ATTRIBUTE_MAP_ADD(Secondary, CriticalHitChance)
+	AURA_ATTRIBUTE_MAP_ADD(Secondary, CriticalHitDamage)
+	AURA_ATTRIBUTE_MAP_ADD(Secondary, CriticalHitResistance)
+	AURA_ATTRIBUTE_MAP_ADD(Secondary, HealthRegeneration)
+	AURA_ATTRIBUTE_MAP_ADD(Secondary, ManaRegeneration)
+	AURA_ATTRIBUTE_MAP_ADD(Secondary, MaxHealth)
+	AURA_ATTRIBUTE_MAP_ADD(Secondary, MaxMana)
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
@@ -66,7 +85,7 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimePropert
 	AURA_ATTRIBUTE_NOTIFY(ManaRegeneration)
 	AURA_ATTRIBUTE_NOTIFY(MaxHealth);
 	AURA_ATTRIBUTE_NOTIFY(MaxMana);
-	
+
 	AURA_ATTRIBUTE_NOTIFY(Health);
 	AURA_ATTRIBUTE_NOTIFY(Mana);
 }
@@ -122,4 +141,3 @@ AURA_ATTRIBUTE_IMPL(MaxMana)
 
 AURA_ATTRIBUTE_IMPL(Health)
 AURA_ATTRIBUTE_IMPL(Mana)
-

@@ -30,6 +30,9 @@
 		GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, X, Old##X);\
 	}
 
+#define AURA_ATTRIBUTE_MAP_ADD(X, Y)\
+	TagsToAttributes.Add(GameplayTags.Attributes##X##Y, Get##Y##Attribute);
+
 USTRUCT(BlueprintType)
 struct FEffectProperties
 {
@@ -88,6 +91,8 @@ public:
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
+	TMap<FGameplayTag,  FGameplayAttribute(*)()> TagsToAttributes;
+	
 	/*
 	 * Primary Attributes
 	 */
@@ -188,8 +193,6 @@ public:
 	UFUNCTION()
 	void OnRep_Health(const FGameplayAttributeData& OldHealth) const;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Health)
-
-
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Mana, Category = "Vital Attributes")
 	FGameplayAttributeData Mana;
