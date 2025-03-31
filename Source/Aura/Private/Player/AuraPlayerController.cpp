@@ -2,9 +2,13 @@
 
 
 #include "Player/AuraPlayerController.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
-#include "UI/HUD/AuraHUD.h"
+#include "GameplayTagContainer.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "Input/AuraEnhancedInputComponent.h"
+
 #include "Interaction/EnemyInterface.h"
 
 
@@ -18,6 +22,57 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 	Super::PlayerTick(DeltaTime);
 
 	CursorTrace();
+}
+
+void AAuraPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+	check(AuraContext);
+
+	if (const auto Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+	{
+		Subsystem->AddMappingContext(AuraContext, 0);
+	}
+
+	bShowMouseCursor = true;
+	DefaultMouseCursor = EMouseCursor::Default;
+
+	FInputModeGameAndUI InputModeData;
+	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	InputModeData.SetHideCursorDuringCapture(false);
+	SetInputMode(InputModeData);
+}
+
+void AAuraPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+	const auto AuraInputComponent = CastChecked<UAuraEnhancedInputComponent>(InputComponent);
+
+	AuraInputComponent->BindAction(
+		MoveAction, ETriggerEvent::Triggered,
+		this, &ThisClass::Move);
+
+	AuraInputComponent->BindAbilityActions(InputConfig, this,
+	                                       &ThisClass::AbilityInputTagPressed,
+	                                       &ThisClass::AbilityInputTagReleased,
+	                                       &ThisClass::AbilityInputTagHeld);
+}
+
+void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
+{
+	const auto InputAxisVector = InputActionValue.Get<FVector2D>();
+	const FRotator Rotation = GetControlRotation();
+	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+
+	const auto ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	const auto RightDirection = FRotationMatrix(Rotation).GetUnitAxis(EAxis::Y);
+
+	if (const auto ControlledPawn = GetPawn<APawn>())
+	{
+		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
+		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
+	}
 }
 
 void AAuraPlayerController::CursorTrace()
@@ -55,48 +110,28 @@ void AAuraPlayerController::CursorTrace()
 	}
 }
 
-void AAuraPlayerController::BeginPlay()
+
+void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-	Super::BeginPlay();
-	check(AuraContext);
-
-	if (const auto Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
-	{
-		Subsystem->AddMappingContext(AuraContext, 0);
-	}
-
-	bShowMouseCursor = true;
-	DefaultMouseCursor = EMouseCursor::Default;
-
-	FInputModeGameAndUI InputModeData;
-	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-	InputModeData.SetHideCursorDuringCapture(false);
-	SetInputMode(InputModeData);
+	//GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, *InputTag.ToString());
 }
 
-void AAuraPlayerController::SetupInputComponent()
+void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-	Super::SetupInputComponent();
-
-	const auto EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-
-	EnhancedInputComponent->BindAction(
-		MoveAction, ETriggerEvent::Triggered,
-		this, &ThisClass::Move);
+	if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
 }
 
-void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
+void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
-	const auto InputAxisVector = InputActionValue.Get<FVector2D>();
-	const FRotator Rotation = GetControlRotation();
-	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+	if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
+}
 
-	const auto ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	const auto RightDirection = FRotationMatrix(Rotation).GetUnitAxis(EAxis::Y);
-
-	if (const auto ControlledPawn = GetPawn<APawn>())
+UAuraAbilitySystemComponent* AAuraPlayerController::GetASC()
+{
+	if (!AuraAbilitySystemComponent)
 	{
-		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
-		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
+		AuraAbilitySystemComponent = Cast<UAuraAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn()));
 	}
+	
+	return AuraAbilitySystemComponent;
 }
