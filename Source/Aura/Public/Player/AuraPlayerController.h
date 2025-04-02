@@ -40,6 +40,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> MoveAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> ShiftAction;
+
 	UPROPERTY(EditDefaultsOnly, Category = "HUD")
 	TSubclassOf<AAuraHUD> HUDClass;
 
@@ -49,6 +52,10 @@ private:
 	TScriptInterface<IEnemyInterface> LastActor;
 	TScriptInterface<IEnemyInterface> ThisActor;
 	FHitResult CursorHit;
+
+	void ShiftPressed() { bShiftKeyDown = true; };
+	void ShiftReleased() { bShiftKeyDown = false; };
+	bool bShiftKeyDown = false;
 
 	void AbilityInputTagPressed(FGameplayTag InputTag);
 	void AbilityInputTagReleased(FGameplayTag InputTag);
@@ -72,7 +79,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Nva")
 	bool bShowNavPath = false;
-	
+
 	UPROPERTY(EditDefaultsOnly, Category = "Nva")
 	float AutoRunAcceptanceRadius = 50.f;
 
