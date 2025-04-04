@@ -10,6 +10,15 @@
 
 #define STR_COM(X, Y) X##Y
 
+#define AURA_GAMEPLAY_TAG_DECL_1(Name)\
+FGameplayTag Name;
+
+#define AURA_GAMEPLAY_TAG_REG_1(Name, Tip)\
+	GameplayTags.Name = UGameplayTagsManager::Get().AddNativeGameplayTag(\
+		FName(#Name),\
+		FString(Tip)\
+	);
+
 #define AURA_GAMEPLAY_TAG_DECL_2(Category, Name)\
 	FGameplayTag Category##Name;
 
@@ -35,11 +44,17 @@
 #define AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Category, Name, Tip)\
 	AURA_GAMEPLAY_TAG_REG_3(Attributes, Category, Name, Tip)
 
-#define AURA_GAMEPLAY_INPUT_TAG_DECL(Category, Name)\
-	AURA_GAMEPLAY_TAG_DECL_2(Category, Name)
+#define AURA_GAMEPLAY_INPUT_TAG_DECL(Name)\
+	AURA_GAMEPLAY_TAG_DECL_2(InputTag, Name)
 
-#define AURA_GAMEPLAY_INPUT_TAG_REG(Category, Name, Tip)\
-	AURA_GAMEPLAY_TAG_REG_2(Category, Name, Tip)
+#define AURA_GAMEPLAY_INPUT_TAG_REG(Name, Tip)\
+	AURA_GAMEPLAY_TAG_REG_2(InputTag, Name, Tip)
+
+#define AURA_GAMEPLAY_EFFECT_TAG_DECL(Name)\
+	AURA_GAMEPLAY_TAG_DECL_2(Effects, Name)
+
+#define AURA_GAMEPLAY_EFFECT_TAG_REG(Name, Tip)\
+	AURA_GAMEPLAY_TAG_REG_2(Effects, Name, Tip)
 
 /**
  * AuraGameplayTags
@@ -68,13 +83,18 @@ public:
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_DECL(Secondary, MaxHealth)
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_DECL(Secondary, MaxMana)
 
-	AURA_GAMEPLAY_INPUT_TAG_DECL(InputTag, LMB);
-	AURA_GAMEPLAY_INPUT_TAG_DECL(InputTag, RMB);
-	AURA_GAMEPLAY_INPUT_TAG_DECL(InputTag, 1);
-	AURA_GAMEPLAY_INPUT_TAG_DECL(InputTag, 2);
-	AURA_GAMEPLAY_INPUT_TAG_DECL(InputTag, 3);
-	AURA_GAMEPLAY_INPUT_TAG_DECL(InputTag, 4);
+	AURA_GAMEPLAY_INPUT_TAG_DECL(LMB);
+	AURA_GAMEPLAY_INPUT_TAG_DECL(RMB);
+	AURA_GAMEPLAY_INPUT_TAG_DECL(1);
+	AURA_GAMEPLAY_INPUT_TAG_DECL(2);
+	AURA_GAMEPLAY_INPUT_TAG_DECL(3);
+	AURA_GAMEPLAY_INPUT_TAG_DECL(4);
 
+	
+	AURA_GAMEPLAY_TAG_DECL_1(Damage);
+
+	AURA_GAMEPLAY_EFFECT_TAG_DECL(HitReact)
+	
 private:
 	static FAuraGameplayTags GameplayTags;
 };

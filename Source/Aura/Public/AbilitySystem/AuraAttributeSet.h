@@ -91,8 +91,8 @@ public:
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
-	TMap<FGameplayTag,  FGameplayAttribute(*)()> TagsToAttributes;
-	
+	TMap<FGameplayTag, FGameplayAttribute(*)()> TagsToAttributes;
+
 	/*
 	 * Primary Attributes
 	 */
@@ -183,7 +183,7 @@ public:
 	UFUNCTION()
 	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxMana)
-	
+
 	/*
 	 * Vital Attributes
 	 */
@@ -199,4 +199,15 @@ public:
 	UFUNCTION()
 	void OnRep_Mana(const FGameplayAttributeData& OldMana) const;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Mana)
+
+	/*
+	 * Meta Attributes
+	 */
+
+	UPROPERTY(BlueprintReadOnly, Category = "Meta Attributes")
+	FGameplayAttributeData InComingDamage;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, InComingDamage)
+
+private:
+	static void ShowFloatingText(const FEffectProperties& Props, float Damage);
 };

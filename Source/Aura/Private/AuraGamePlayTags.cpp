@@ -34,10 +34,17 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	/*
  	* Input 
  	*/
-	AURA_GAMEPLAY_INPUT_TAG_REG(InputTag, LMB, "Input Tag for Left Mouse Button.")
-	AURA_GAMEPLAY_INPUT_TAG_REG(InputTag, RMB, "Input Tag for Right Mouse Button.")
-	AURA_GAMEPLAY_INPUT_TAG_REG(InputTag, 1, "Input Tag for 1 Key.")
-	AURA_GAMEPLAY_INPUT_TAG_REG(InputTag, 2, "Input Tag for 2 Key.")
-	AURA_GAMEPLAY_INPUT_TAG_REG(InputTag, 3, "Input Tag for 3 Key.")
-	AURA_GAMEPLAY_INPUT_TAG_REG(InputTag, 4, "Input Tag for 4 Key.")
+	AURA_GAMEPLAY_INPUT_TAG_REG(LMB, "Input Tag for Left Mouse Button.")
+	AURA_GAMEPLAY_INPUT_TAG_REG(RMB, "Input Tag for Right Mouse Button.")
+	AURA_GAMEPLAY_INPUT_TAG_REG(1, "Input Tag for 1 Key.")
+	AURA_GAMEPLAY_INPUT_TAG_REG(2, "Input Tag for 2 Key.")
+	AURA_GAMEPLAY_INPUT_TAG_REG(3, "Input Tag for 3 Key.")
+	AURA_GAMEPLAY_INPUT_TAG_REG(4, "Input Tag for 4 Key.")
+
+	AURA_GAMEPLAY_TAG_REG_1(Damage, "Damage.")
+
+	/*
+	 * Effects
+	 */
+	AURA_GAMEPLAY_EFFECT_TAG_REG(HitReact, "Tag granted when Hit Reacting.")
 }
