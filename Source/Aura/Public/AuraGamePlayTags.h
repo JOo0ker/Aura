@@ -50,6 +50,15 @@ FGameplayTag Name;
 #define AURA_GAMEPLAY_INPUT_TAG_REG(Name, Tip)\
 	AURA_GAMEPLAY_TAG_REG_2(InputTag, Name, Tip)
 
+#define AURA_GAMEPLAY_DAMAGE_TAG_DECL(Name)\
+	AURA_GAMEPLAY_TAG_DECL_2(Damage, Name)\
+	AURA_GAMEPLAY_ATTRIBUTE_TAG_DECL(Resistance, Name##Resistance)
+
+#define AURA_GAMEPLAY_DAMAGE_TAG_REG(Name, Tip, TipResistance)\
+	AURA_GAMEPLAY_TAG_REG_2(Damage, Name, Tip);\
+	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Resistance, Name##Resistance, TipResistance);\
+	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage##Name, GameplayTags.Attributes##Resistance##Name##Resistance);
+
 #define AURA_GAMEPLAY_EFFECT_TAG_DECL(Name)\
 	AURA_GAMEPLAY_TAG_DECL_2(Effects, Name)
 
@@ -64,14 +73,16 @@ FGameplayTag Name;
 struct FAuraGameplayTags
 {
 public:
-	static FAuraGameplayTags Get() { return GameplayTags; }
+	FAuraGameplayTags();
+
+	static FAuraGameplayTags& Get() { return GameplayTags; }
 	static void InitializeNativeGameplayTags();
 
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_DECL(Primary, Strength)
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_DECL(Primary, Intelligence)
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_DECL(Primary, Resilience)
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_DECL(Primary, Vigor)
-	
+
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_DECL(Secondary, Armor)
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_DECL(Secondary, ArmorPenetration)
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_DECL(Secondary, BlockChance)
@@ -90,11 +101,17 @@ public:
 	AURA_GAMEPLAY_INPUT_TAG_DECL(3);
 	AURA_GAMEPLAY_INPUT_TAG_DECL(4);
 
-	
 	AURA_GAMEPLAY_TAG_DECL_1(Damage);
+	AURA_GAMEPLAY_DAMAGE_TAG_DECL(Fire);
+	AURA_GAMEPLAY_DAMAGE_TAG_DECL(Lightning);
+	AURA_GAMEPLAY_DAMAGE_TAG_DECL(Arcane);
+	AURA_GAMEPLAY_DAMAGE_TAG_DECL(Physical);
+
+
+	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
 
 	AURA_GAMEPLAY_EFFECT_TAG_DECL(HitReact)
-	
+
 private:
 	static FAuraGameplayTags GameplayTags;
 };

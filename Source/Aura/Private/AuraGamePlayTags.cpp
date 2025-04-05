@@ -6,12 +6,12 @@
 
 FAuraGameplayTags FAuraGameplayTags::GameplayTags;
 
-void FAuraGameplayTags::InitializeNativeGameplayTags()
+FAuraGameplayTags::FAuraGameplayTags()
 {
 	/*
 	 * Primary Attributes
 	 */
-	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Primary, Strength, "Increases physical damage.")
+	AURA_GAMEPLAY_TAG_REG_3(Attributes, Primary, Strength, "Increases physical damage.")
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Primary, Intelligence, "Increases magical damage.")
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Primary, Resilience, "Increases Armor and Armor Penetration.")
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Primary, Vigor, "Increases Health.")
@@ -41,10 +41,22 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	AURA_GAMEPLAY_INPUT_TAG_REG(3, "Input Tag for 3 Key.")
 	AURA_GAMEPLAY_INPUT_TAG_REG(4, "Input Tag for 4 Key.")
 
+	/*
+	 * Damage
+	 */
 	AURA_GAMEPLAY_TAG_REG_1(Damage, "Damage.")
+	AURA_GAMEPLAY_DAMAGE_TAG_REG(Fire, "Fire Damage Type.", "Resistance to Fire damage")
+	AURA_GAMEPLAY_DAMAGE_TAG_REG(Lightning, "Lightning Damage Type.", "Resistance to Lightning damage")
+	AURA_GAMEPLAY_DAMAGE_TAG_REG(Arcane, "Arcane Damage Type.", "Resistance to Arcane damage")
+	AURA_GAMEPLAY_DAMAGE_TAG_REG(Physical, "Physical Damage Type.", "Resistance to Physical damage")
 
 	/*
 	 * Effects
 	 */
 	AURA_GAMEPLAY_EFFECT_TAG_REG(HitReact, "Tag granted when Hit Reacting.")
+}
+
+void FAuraGameplayTags::InitializeNativeGameplayTags()
+{
+	
 }

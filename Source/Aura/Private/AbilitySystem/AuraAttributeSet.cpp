@@ -7,6 +7,7 @@
 #include "AbilitySystemComponent.h"
 #include "AuraGamePlayTags.h"
 #include "GameplayEffectExtension.h"
+#include "AbilitySystem/AuraAbilitySystemLibrary.h"
 #include "GameFramework/Character.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
@@ -51,7 +52,7 @@ UAuraAttributeSet::UAuraAttributeSet()
 {
 	// ReSharper disable once CppUseStructuredBinding
 	const auto& GameplayTags = FAuraGameplayTags::Get();
-
+	
 	AURA_ATTRIBUTE_MAP_ADD(Primary, Strength);
 	AURA_ATTRIBUTE_MAP_ADD(Primary, Intelligence);
 	AURA_ATTRIBUTE_MAP_ADD(Primary, Resilience);
@@ -67,6 +68,11 @@ UAuraAttributeSet::UAuraAttributeSet()
 	AURA_ATTRIBUTE_MAP_ADD(Secondary, ManaRegeneration)
 	AURA_ATTRIBUTE_MAP_ADD(Secondary, MaxHealth)
 	AURA_ATTRIBUTE_MAP_ADD(Secondary, MaxMana)
+
+	AURA_ATTRIBUTE_MAP_ADD(Resistance, FireResistance)
+	AURA_ATTRIBUTE_MAP_ADD(Resistance, LightningResistance)
+	AURA_ATTRIBUTE_MAP_ADD(Resistance, ArcaneResistance)
+	AURA_ATTRIBUTE_MAP_ADD(Resistance, PhysicalResistance)
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
@@ -91,6 +97,11 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimePropert
 
 	AURA_ATTRIBUTE_NOTIFY(Health);
 	AURA_ATTRIBUTE_NOTIFY(Mana);
+
+	AURA_ATTRIBUTE_NOTIFY(FireResistance)
+	AURA_ATTRIBUTE_NOTIFY(LightningResistance)
+	AURA_ATTRIBUTE_NOTIFY(ArcaneResistance)
+	AURA_ATTRIBUTE_NOTIFY(PhysicalResistance)
 }
 
 void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -148,18 +159,21 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				Props.TargetAsc->TryActivateAbilitiesByTag(TagContainer);
 			}
 
-			ShowFloatingText(Props, LocalIncomingDamage);
+			const bool bBlock = UAuraAbilitySystemLibrary::IsBlockHit(Props.EffectContextHandle);
+			const bool bCritical = UAuraAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);
+			
+			ShowFloatingText(Props, LocalIncomingDamage, bBlock, bCritical);
 		}
 	}
 }
 
-void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage)
+void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCriticalHit)
 {
 	if (Props.SourceCharacter != Props.TargetCharacter)
 	{
-		if (const auto PC = Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter, 0)))
+		if (const auto PC = Cast<AAuraPlayerController>(Props.SourceCharacter->Controller))
 		{
-			PC->ShowDamageNumber(Damage, Props.TargetCharacter);
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter, bBlockedHit, bCriticalHit);
 		}
 	}
 }
@@ -180,6 +194,10 @@ AURA_ATTRIBUTE_IMPL(ManaRegeneration)
 AURA_ATTRIBUTE_IMPL(MaxHealth)
 AURA_ATTRIBUTE_IMPL(MaxMana)
 
-
 AURA_ATTRIBUTE_IMPL(Health)
 AURA_ATTRIBUTE_IMPL(Mana)
+
+AURA_ATTRIBUTE_IMPL(FireResistance)
+AURA_ATTRIBUTE_IMPL(LightningResistance)
+AURA_ATTRIBUTE_IMPL(ArcaneResistance)
+AURA_ATTRIBUTE_IMPL(PhysicalResistance)
