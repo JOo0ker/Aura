@@ -37,19 +37,21 @@ FGameplayTag Name;
 		FString(Tip)\
 	);
 
-
+// Attributes
 #define AURA_GAMEPLAY_ATTRIBUTE_TAG_DECL(Category, Name)\
 	AURA_GAMEPLAY_TAG_DECL_3(Attributes, Category, Name)
 
 #define AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Category, Name, Tip)\
 	AURA_GAMEPLAY_TAG_REG_3(Attributes, Category, Name, Tip)
 
+// Input
 #define AURA_GAMEPLAY_INPUT_TAG_DECL(Name)\
 	AURA_GAMEPLAY_TAG_DECL_2(InputTag, Name)
 
 #define AURA_GAMEPLAY_INPUT_TAG_REG(Name, Tip)\
 	AURA_GAMEPLAY_TAG_REG_2(InputTag, Name, Tip)
 
+// Damage
 #define AURA_GAMEPLAY_DAMAGE_TAG_DECL(Name)\
 	AURA_GAMEPLAY_TAG_DECL_2(Damage, Name)\
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_DECL(Resistance, Name##Resistance)
@@ -59,11 +61,19 @@ FGameplayTag Name;
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Resistance, Name##Resistance, TipResistance);\
 	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage##Name, GameplayTags.Attributes##Resistance##Name##Resistance);
 
+// Effect
 #define AURA_GAMEPLAY_EFFECT_TAG_DECL(Name)\
 	AURA_GAMEPLAY_TAG_DECL_2(Effects, Name)
 
 #define AURA_GAMEPLAY_EFFECT_TAG_REG(Name, Tip)\
 	AURA_GAMEPLAY_TAG_REG_2(Effects, Name, Tip)
+
+// Abilities
+#define AURA_GAMEPLAY_ABILITIES_TAG_DECL(Name)\
+	AURA_GAMEPLAY_TAG_DECL_2(Abilities, Name)
+
+#define AURA_GAMEPLAY_ABILITIES_TAG_REG(Name, Tip)\
+	AURA_GAMEPLAY_TAG_REG_2(Abilities, Name, Tip)
 
 /**
  * AuraGameplayTags
@@ -107,6 +117,7 @@ public:
 	AURA_GAMEPLAY_DAMAGE_TAG_DECL(Arcane);
 	AURA_GAMEPLAY_DAMAGE_TAG_DECL(Physical);
 
+	AURA_GAMEPLAY_ABILITIES_TAG_DECL(Attack);
 
 	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
 

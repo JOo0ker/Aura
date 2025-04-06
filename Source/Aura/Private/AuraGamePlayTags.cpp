@@ -54,6 +54,12 @@ FAuraGameplayTags::FAuraGameplayTags()
 	 * Effects
 	 */
 	AURA_GAMEPLAY_EFFECT_TAG_REG(HitReact, "Tag granted when Hit Reacting.")
+
+	/*
+	 * Abilities
+	 */
+
+	AURA_GAMEPLAY_ABILITIES_TAG_REG(Attack, "Attack Ability Tag")
 }
 
 void FAuraGameplayTags::InitializeNativeGameplayTags()
