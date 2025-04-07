@@ -44,6 +44,13 @@ FGameplayTag Name;
 #define AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Category, Name, Tip)\
 	AURA_GAMEPLAY_TAG_REG_3(Attributes, Category, Name, Tip)
 
+// Montage
+#define AURA_GAMEPLAY_MONTAGE_TAG_DECL(Category, Name)\
+	AURA_GAMEPLAY_TAG_DECL_3(Montage, Category, Name)
+
+#define AURA_GAMEPLAY_MONTAGE_TAG_REG(Category, Name, Tip)\
+	AURA_GAMEPLAY_TAG_REG_3(Montage, Category, Name, Tip)
+
 // Input
 #define AURA_GAMEPLAY_INPUT_TAG_DECL(Name)\
 	AURA_GAMEPLAY_TAG_DECL_2(InputTag, Name)
@@ -122,6 +129,10 @@ public:
 	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
 
 	AURA_GAMEPLAY_EFFECT_TAG_DECL(HitReact)
+
+	AURA_GAMEPLAY_MONTAGE_TAG_DECL(Attack, Weapon)
+	AURA_GAMEPLAY_MONTAGE_TAG_DECL(Attack, RightHand)
+	AURA_GAMEPLAY_MONTAGE_TAG_DECL(Attack, LeftHand)
 
 private:
 	static FAuraGameplayTags GameplayTags;

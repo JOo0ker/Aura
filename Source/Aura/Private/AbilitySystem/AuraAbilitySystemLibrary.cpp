@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "AuraAbilityTypes.h"
+#include "Engine/OverlapResult.h"
 #include "Game/AuraGameModeBase.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
@@ -56,7 +57,7 @@ void UAuraAbilitySystemLibrary::InitializeDefaultAttributes(const UObject* World
 	if (const auto CharacterClassInfo = GetCharacterClassInfo(WorldContextObject))
 	{
 		const auto AvatarActor = ASC->GetAvatarActor();
-		
+
 		// ReSharper disable once CppUseStructuredBinding
 		const auto DefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
 
@@ -80,7 +81,8 @@ void UAuraAbilitySystemLibrary::InitializeDefaultAttributes(const UObject* World
 	}
 }
 
-void UAuraAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC, ECharacterClass CharacterClass)
+void UAuraAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC,
+                                                     ECharacterClass CharacterClass)
 {
 	if (const auto CharacterClassInfo = GetCharacterClassInfo(WorldContextObject))
 	{
@@ -98,7 +100,6 @@ void UAuraAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContext
 				ASC->GiveAbility(AbilitySpec);
 			}
 		}
-
 	}
 }
 
@@ -130,7 +131,8 @@ bool UAuraAbilitySystemLibrary::IsCriticalHit(const FGameplayEffectContextHandle
 	return false;
 }
 
-void UAuraAbilitySystemLibrary::SetIsBlockHit(FGameplayEffectContextHandle& EffectContextHandle, const bool bInIsBlockHit)
+void UAuraAbilitySystemLibrary::SetIsBlockHit(FGameplayEffectContextHandle& EffectContextHandle,
+                                              const bool bInIsBlockHit)
 {
 	if (const auto AuraEffectContext = static_cast<FAuraGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
@@ -139,10 +141,48 @@ void UAuraAbilitySystemLibrary::SetIsBlockHit(FGameplayEffectContextHandle& Effe
 }
 
 void UAuraAbilitySystemLibrary::SetIsCriticalHit(FGameplayEffectContextHandle& EffectContextHandle,
-	const bool bInIsCriticalHit)
+                                                 const bool bInIsCriticalHit)
 {
 	if (const auto AuraEffectContext = static_cast<FAuraGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
 		return AuraEffectContext->SetIsCriticalHit(bInIsCriticalHit);
 	}
+}
+
+void UAuraAbilitySystemLibrary::GetAlivePlayerWithRadius(const UObject* WorldContextObject,
+                                                         TArray<AActor*>& OutOverlappingActors,
+                                                         const TArray<AActor*>& ActorsToIgnore, float Radius,
+                                                         const FVector& SphereOrigin)
+{
+	FCollisionQueryParams SphereParams;
+	SphereParams.AddIgnoredActors(ActorsToIgnore);
+
+	TArray<FOverlapResult> Overlaps;
+	if (const auto World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
+	{
+		World->OverlapMultiByObjectType(
+			Overlaps,
+			SphereOrigin,
+			FQuat::Identity,
+			FCollisionObjectQueryParams(FCollisionObjectQueryParams::InitType::AllDynamicObjects),
+			FCollisionShape::MakeSphere(Radius),
+			SphereParams);
+
+		for (const auto& Overlap : Overlaps)
+		{
+			if (Overlap.GetActor()->Implements<UCombatInterface>() && !ICombatInterface::Execute_IsDead(Overlap.GetActor()))
+			{
+				OutOverlappingActors.AddUnique(ICombatInterface::Execute_GetAvatar(Overlap.GetActor()));
+			}
+		}
+	}
+}
+
+bool UAuraAbilitySystemLibrary::IsNotFriend(AActor* FirstActor, AActor* SecondActor)
+{
+	const bool bBothArePlayers = FirstActor->ActorHasTag(FName("Player")) && SecondActor->ActorHasTag(FName("Player"));
+	const bool bBothAreEnemies = FirstActor->ActorHasTag(FName("Enemy")) && SecondActor->ActorHasTag(FName("Enemy"));
+	const bool bFriends = bBothArePlayers || bBothAreEnemies;
+
+	return !bFriends;
 }

@@ -52,7 +52,7 @@ UAuraAttributeSet::UAuraAttributeSet()
 {
 	// ReSharper disable once CppUseStructuredBinding
 	const auto& GameplayTags = FAuraGameplayTags::Get();
-	
+
 	AURA_ATTRIBUTE_MAP_ADD(Primary, Strength);
 	AURA_ATTRIBUTE_MAP_ADD(Primary, Intelligence);
 	AURA_ATTRIBUTE_MAP_ADD(Primary, Resilience);
@@ -124,7 +124,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	Super::PostGameplayEffectExecute(Data);
 
 	FEffectProperties Props;
-	Props.SetEffectProperties(Data);
+	SetEffectProperties(Data, Props);
 
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
@@ -161,19 +161,63 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 
 			const bool bBlock = UAuraAbilitySystemLibrary::IsBlockHit(Props.EffectContextHandle);
 			const bool bCritical = UAuraAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);
-			
+
 			ShowFloatingText(Props, LocalIncomingDamage, bBlock, bCritical);
 		}
 	}
 }
 
-void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCriticalHit)
+void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit,
+                                         bool bCriticalHit)
 {
 	if (Props.SourceCharacter != Props.TargetCharacter)
 	{
 		if (const auto PC = Cast<AAuraPlayerController>(Props.SourceCharacter->Controller))
 		{
 			PC->ShowDamageNumber(Damage, Props.TargetCharacter, bBlockedHit, bCriticalHit);
+			return;
+		}
+
+		if (const auto PC = Cast<AAuraPlayerController>(Props.TargetCharacter->Controller))
+		{
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter, bBlockedHit, bCriticalHit);
+		}
+	}
+}
+
+void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const
+{
+	{
+		// Source = causer of the effect, Target = target of the effect (owner of this AS)
+
+		Props.EffectContextHandle = Data.EffectSpec.GetContext();
+		Props.SourceAsc = Props.EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent();
+
+		if (IsValid(Props.SourceAsc) && Props.SourceAsc->AbilityActorInfo.IsValid() && Props.SourceAsc->AbilityActorInfo
+			->AvatarActor.IsValid())
+		{
+			Props.SourceAvatarActor = Props.SourceAsc->AbilityActorInfo->AvatarActor.Get();
+			Props.SourceController = Props.SourceAsc->AbilityActorInfo->PlayerController.Get();
+			if (Props.SourceController == nullptr && Props.SourceAvatarActor != nullptr)
+			{
+				if (const APawn* Pawn = Cast<APawn>(Props.SourceAvatarActor))
+				{
+					Props.SourceController = Pawn->GetController();
+				}
+			}
+			if (Props.SourceController)
+			{
+				Props.SourceCharacter = Cast<ACharacter>(Props.SourceController->GetPawn());
+			}
+		}
+
+		if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid())
+		{
+			Props.TargetAvatarActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
+			
+			Props.TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
+			Props.TargetCharacter = Cast<ACharacter>(Props.TargetAvatarActor);
+			Props.TargetAsc = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Props.TargetAvatarActor);
 		}
 	}
 }

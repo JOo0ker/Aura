@@ -60,6 +60,14 @@ FAuraGameplayTags::FAuraGameplayTags()
 	 */
 
 	AURA_GAMEPLAY_ABILITIES_TAG_REG(Attack, "Attack Ability Tag")
+
+	/*
+	 * Montage
+	 */
+
+	AURA_GAMEPLAY_MONTAGE_TAG_REG(Attack, Weapon, "Weapon")
+	AURA_GAMEPLAY_MONTAGE_TAG_REG(Attack, RightHand, "Right Hand")
+	AURA_GAMEPLAY_MONTAGE_TAG_REG(Attack, LeftHand, "Left Hand")
 }
 
 void FAuraGameplayTags::InitializeNativeGameplayTags()
