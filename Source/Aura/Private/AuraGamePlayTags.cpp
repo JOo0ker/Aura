@@ -21,11 +21,12 @@ FAuraGameplayTags::FAuraGameplayTags()
 	 */
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Secondary, Armor, "Reduces damage taken, improves Block Chance.")
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Secondary, ArmorPenetration,
-	                      "Ignored Percentage of enemy Armor, Increases Critical Hit Chance.")
+	                                "Ignored Percentage of enemy Armor, Increases Critical Hit Chance.")
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Secondary, BlockChance, "Chance to cut incoming damage in half.")
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Secondary, CriticalHitChance, "Chance to Double Damage plus critical hit bonus.")
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Secondary, CriticalHitDamage, "Bonus damage added when a critical hit is scored.")
-	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Secondary, CriticalHitResistance, "Reduces Critical Hit Chance of attacking enemies.")
+	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Secondary, CriticalHitResistance,
+	                                "Reduces Critical Hit Chance of attacking enemies.")
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Secondary, HealthRegeneration, "Amount of Health regenerated every 1 second.")
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Secondary, ManaRegeneration, "Amount of Mana regenerated every 1 second.")
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Secondary, MaxHealth, "Maximum amount of Health obtainable.")
@@ -58,19 +59,25 @@ FAuraGameplayTags::FAuraGameplayTags()
 	/*
 	 * Abilities
 	 */
-
 	AURA_GAMEPLAY_ABILITIES_TAG_REG(Attack, "Attack Ability Tag")
 
 	/*
-	 * Montage
+	 * Combat Socket
 	 */
+	AURA_GAMEPLAY_COMBAT_SOCKET_TAG_REG(Weapon, "Weapon")
+	AURA_GAMEPLAY_COMBAT_SOCKET_TAG_REG(RightHand, "Right Hand")
+	AURA_GAMEPLAY_COMBAT_SOCKET_TAG_REG(LeftHand, "Left Hand")
+	AURA_GAMEPLAY_COMBAT_SOCKET_TAG_REG(Tail, "Tail")
 
-	AURA_GAMEPLAY_MONTAGE_TAG_REG(Attack, Weapon, "Weapon")
-	AURA_GAMEPLAY_MONTAGE_TAG_REG(Attack, RightHand, "Right Hand")
-	AURA_GAMEPLAY_MONTAGE_TAG_REG(Attack, LeftHand, "Left Hand")
+	/*
+ 	* Abilities
+ 	*/
+	AURA_GAMEPLAY_MONTAGE_TAG_REG(Attack, 1, "Attack 1")
+	AURA_GAMEPLAY_MONTAGE_TAG_REG(Attack, 2, "Attack 2")
+	AURA_GAMEPLAY_MONTAGE_TAG_REG(Attack, 3, "Attack 3")
+	AURA_GAMEPLAY_MONTAGE_TAG_REG(Attack, 4, "Attack 4")
 }
 
 void FAuraGameplayTags::InitializeNativeGameplayTags()
 {
-	
 }

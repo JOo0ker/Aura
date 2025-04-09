@@ -23,7 +23,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	FORCEINLINE UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+	FORCEINLINE UAttributeSet* GetAttributeSet() const { return AttributeSet.Get(); }
 
 	FORCEINLINE int32 GetPlayerLevel() const { return Level; }
 

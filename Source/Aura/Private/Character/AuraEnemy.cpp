@@ -111,28 +111,31 @@ void AAuraEnemy::BeginPlay()
 		AuraUserWidget->SetWidgetController(this);
 	}
 
-	if (const auto AuraAS = CastChecked<UAuraAttributeSet>(AttributeSet))
+	if (AttributeSet)
 	{
-		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetHealthAttribute()).AddLambda(
-			[this](const FOnAttributeChangeData& Data)
-			{
-				OnHealthChanged.Broadcast(Data.NewValue);
-			});
+		if (const auto AuraAS = CastChecked<UAuraAttributeSet>(AttributeSet))
+		{
+			AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetHealthAttribute()).AddLambda(
+				[this](const FOnAttributeChangeData& Data)
+				{
+					OnHealthChanged.Broadcast(Data.NewValue);
+				});
 
-		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetMaxHealthAttribute()).AddLambda(
-			[this](const FOnAttributeChangeData& Data)
-			{
-				OnMaxHealthChanged.Broadcast(Data.NewValue);
-			});
+			AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAS->GetMaxHealthAttribute()).AddLambda(
+				[this](const FOnAttributeChangeData& Data)
+				{
+					OnMaxHealthChanged.Broadcast(Data.NewValue);
+				});
 
-		AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().EffectsHitReact,
-		                                                 EGameplayTagEventType::NewOrRemoved).AddUObject(
-			this,
-			&AAuraEnemy::HitReactTagChanged
-		);
+			AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().EffectsHitReact,
+															 EGameplayTagEventType::NewOrRemoved).AddUObject(
+				this,
+				&AAuraEnemy::HitReactTagChanged
+			);
 
-		OnHealthChanged.Broadcast(AuraAS->GetHealth());
-		OnMaxHealthChanged.Broadcast(AuraAS->GetMaxHealth());
+			OnHealthChanged.Broadcast(AuraAS->GetHealth());
+			OnMaxHealthChanged.Broadcast(AuraAS->GetMaxHealth());
+		}
 	}
 }
 

@@ -44,12 +44,12 @@ FGameplayTag Name;
 #define AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Category, Name, Tip)\
 	AURA_GAMEPLAY_TAG_REG_3(Attributes, Category, Name, Tip)
 
-// Montage
-#define AURA_GAMEPLAY_MONTAGE_TAG_DECL(Category, Name)\
-	AURA_GAMEPLAY_TAG_DECL_3(Montage, Category, Name)
+// Combat Socket
+#define AURA_GAMEPLAY_COMBAT_SOCKET_TAG_DECL(Name)\
+	AURA_GAMEPLAY_TAG_DECL_2(CombatSocket, Name)
 
-#define AURA_GAMEPLAY_MONTAGE_TAG_REG(Category, Name, Tip)\
-	AURA_GAMEPLAY_TAG_REG_3(Montage, Category, Name, Tip)
+#define AURA_GAMEPLAY_COMBAT_SOCKET_TAG_REG(Name, Tip)\
+	AURA_GAMEPLAY_TAG_REG_2(CombatSocket, Name, Tip)
 
 // Input
 #define AURA_GAMEPLAY_INPUT_TAG_DECL(Name)\
@@ -81,6 +81,13 @@ FGameplayTag Name;
 
 #define AURA_GAMEPLAY_ABILITIES_TAG_REG(Name, Tip)\
 	AURA_GAMEPLAY_TAG_REG_2(Abilities, Name, Tip)
+
+// Montage
+#define AURA_GAMEPLAY_MONTAGE_TAG_DECL(Category, Name)\
+	AURA_GAMEPLAY_TAG_DECL_3(Montage, Category, Name)
+
+#define AURA_GAMEPLAY_MONTAGE_TAG_REG(Category, Name, Tip)\
+	AURA_GAMEPLAY_TAG_REG_3(Montage, Category, Name, Tip)
 
 /**
  * AuraGameplayTags
@@ -130,9 +137,15 @@ public:
 
 	AURA_GAMEPLAY_EFFECT_TAG_DECL(HitReact)
 
-	AURA_GAMEPLAY_MONTAGE_TAG_DECL(Attack, Weapon)
-	AURA_GAMEPLAY_MONTAGE_TAG_DECL(Attack, RightHand)
-	AURA_GAMEPLAY_MONTAGE_TAG_DECL(Attack, LeftHand)
+	AURA_GAMEPLAY_COMBAT_SOCKET_TAG_DECL(Weapon)
+	AURA_GAMEPLAY_COMBAT_SOCKET_TAG_DECL(RightHand)
+	AURA_GAMEPLAY_COMBAT_SOCKET_TAG_DECL(LeftHand)
+	AURA_GAMEPLAY_COMBAT_SOCKET_TAG_DECL(Tail)
+
+	AURA_GAMEPLAY_MONTAGE_TAG_DECL(Attack, 1)
+	AURA_GAMEPLAY_MONTAGE_TAG_DECL(Attack, 2)
+	AURA_GAMEPLAY_MONTAGE_TAG_DECL(Attack, 3)
+	AURA_GAMEPLAY_MONTAGE_TAG_DECL(Attack, 4)
 
 private:
 	static FAuraGameplayTags GameplayTags;

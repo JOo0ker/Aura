@@ -86,6 +86,11 @@ class AURA_API UAuraAttributeSet : public UAttributeSet
 
 public:
 	UAuraAttributeSet();
+
+	virtual ~UAuraAttributeSet() override
+	{
+		UE_LOG(LogTemp, Display, TEXT("~UAuraAttributeSet()"));
+	}
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
