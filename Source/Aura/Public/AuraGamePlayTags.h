@@ -132,6 +132,7 @@ public:
 	AURA_GAMEPLAY_DAMAGE_TAG_DECL(Physical);
 
 	AURA_GAMEPLAY_ABILITIES_TAG_DECL(Attack);
+	AURA_GAMEPLAY_ABILITIES_TAG_DECL(Summon);
 
 	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
 

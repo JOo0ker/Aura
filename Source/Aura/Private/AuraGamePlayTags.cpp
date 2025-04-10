@@ -60,6 +60,7 @@ FAuraGameplayTags::FAuraGameplayTags()
 	 * Abilities
 	 */
 	AURA_GAMEPLAY_ABILITIES_TAG_REG(Attack, "Attack Ability Tag")
+	AURA_GAMEPLAY_ABILITIES_TAG_REG(Summon, "Summon Ability Tag")
 
 	/*
 	 * Combat Socket
@@ -70,7 +71,7 @@ FAuraGameplayTags::FAuraGameplayTags()
 	AURA_GAMEPLAY_COMBAT_SOCKET_TAG_REG(Tail, "Tail")
 
 	/*
- 	* Abilities
+ 	* Attack
  	*/
 	AURA_GAMEPLAY_MONTAGE_TAG_REG(Attack, 1, "Attack 1")
 	AURA_GAMEPLAY_MONTAGE_TAG_REG(Attack, 2, "Attack 2")
