@@ -82,6 +82,21 @@ FGameplayTag Name;
 #define AURA_GAMEPLAY_ABILITIES_TAG_REG(Name, Tip)\
 	AURA_GAMEPLAY_TAG_REG_2(Abilities, Name, Tip)
 
+// Abilities Fire
+#define AURA_GAMEPLAY_ABILITIES_FIRE_TAG_DECL(Name)\
+AURA_GAMEPLAY_TAG_DECL_3(Abilities, Fire, Name)
+
+#define AURA_GAMEPLAY_ABILITIES_FIRE_TAG_REG(Name, Tip)\
+AURA_GAMEPLAY_TAG_REG_3(Abilities, Fire, Name, Tip)
+
+// Cooldown
+#define AURA_GAMEPLAY_COOLDOWN_FIRE_TAG_DECL(Name)\
+AURA_GAMEPLAY_TAG_DECL_3(Cooldown, Fire, Name)
+
+#define AURA_GAMEPLAY_COOLDOWN_FIRE_TAG_REG(Name, Tip)\
+AURA_GAMEPLAY_TAG_REG_3(Cooldown, Fire, Name, Tip)
+
+
 // Montage
 #define AURA_GAMEPLAY_MONTAGE_TAG_DECL(Category, Name)\
 	AURA_GAMEPLAY_TAG_DECL_3(Montage, Category, Name)
@@ -133,6 +148,8 @@ public:
 
 	AURA_GAMEPLAY_ABILITIES_TAG_DECL(Attack);
 	AURA_GAMEPLAY_ABILITIES_TAG_DECL(Summon);
+	AURA_GAMEPLAY_ABILITIES_FIRE_TAG_DECL(FireBolt);
+	AURA_GAMEPLAY_COOLDOWN_FIRE_TAG_DECL(FireBolt);
 
 	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
 

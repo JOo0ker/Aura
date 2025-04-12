@@ -61,6 +61,12 @@ FAuraGameplayTags::FAuraGameplayTags()
 	 */
 	AURA_GAMEPLAY_ABILITIES_TAG_REG(Attack, "Attack Ability Tag")
 	AURA_GAMEPLAY_ABILITIES_TAG_REG(Summon, "Summon Ability Tag")
+	AURA_GAMEPLAY_ABILITIES_FIRE_TAG_REG(FireBolt, "FireBolt Ability Tag")
+
+	/*
+	 * Cooldown
+	 */
+	AURA_GAMEPLAY_COOLDOWN_FIRE_TAG_REG(FireBolt, "FireBolt Cooldown Tag")
 
 	/*
 	 * Combat Socket
