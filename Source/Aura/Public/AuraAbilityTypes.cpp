@@ -1,11 +1,5 @@
 ﻿#include "AuraAbilityTypes.h"
 
-
-UScriptStruct* FAuraGameplayEffectContext::GetScriptStruct() const
-{
-	return FGameplayEffectContext::GetScriptStruct();
-}
-
 bool FAuraGameplayEffectContext::NetSerialize(FArchive& Ar, class UPackageMap* Map, bool& bOutSuccess)
 {
 	uint32 RepBits = 0;
@@ -40,11 +34,14 @@ bool FAuraGameplayEffectContext::NetSerialize(FArchive& Ar, class UPackageMap* M
 			RepBits |= 1 << 6;
 		}
 		
-		// Block
-		RepBits |= 1 << 7;
-
-		// Critical
-		RepBits |= 1 << 8;
+		if (bIsBlockHit)
+		{
+			RepBits |= 1 << 7;
+		}
+		if (bIsCriticalHit)
+		{
+			RepBits |= 1 << 8;
+		}
 	}
 
 	Ar.SerializeBits(&RepBits, 9);

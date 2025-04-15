@@ -15,13 +15,16 @@ public:
 	FORCEINLINE void SetIsBlockHit(const bool bInIsCriticalHit) { bIsBlockHit = bInIsCriticalHit; }
 	FORCEINLINE void SetIsCriticalHit(const bool bInIsCriticalHit) { bIsCriticalHit = bInIsCriticalHit; }
 
-	virtual UScriptStruct* GetScriptStruct() const override;
+	virtual UScriptStruct* GetScriptStruct() const override
+	{
+		return FGameplayEffectContext::StaticStruct();
+	}
 	virtual bool NetSerialize(FArchive& Ar, class UPackageMap* Map, bool& bOutSuccess) override;
 
 	virtual FGameplayEffectContext* Duplicate() const override
 	{
-		const auto NewContext = new FAuraGameplayEffectContext;
-		*NewContext = *this;
+		const auto NewContext = new FGameplayEffectContext;
+		*NewContext = static_cast<FGameplayEffectContext>(*this);
 		if (GetHitResult())
 		{
 			NewContext->AddHitResult(*GetHitResult(), true);
