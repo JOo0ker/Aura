@@ -33,6 +33,11 @@ FAuraGameplayTags::FAuraGameplayTags()
 	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Secondary, MaxMana, "Maximum amount of Mana obtainable.")
 
 	/*
+ 	* Meta Attributes
+ 	*/
+	AURA_GAMEPLAY_ATTRIBUTE_TAG_REG(Meta, IncomingXP, "Incoming XP Meta Attribute.")
+
+	/*
  	* Input 
  	*/
 	AURA_GAMEPLAY_INPUT_TAG_REG(LMB, "Input Tag for Left Mouse Button.")

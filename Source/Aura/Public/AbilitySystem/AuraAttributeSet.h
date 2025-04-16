@@ -237,8 +237,13 @@ public:
 	FGameplayAttributeData InComingDamage;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, InComingDamage)
 
+	UPROPERTY(BlueprintReadOnly, Category = "Meta Attributes")
+	FGameplayAttributeData InComingXP;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, InComingXP)
+
 private:
 	static void ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCriticalHit);
 
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
+	void SendXPEvent(const FEffectProperties& Props) const;
 };

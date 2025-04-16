@@ -130,6 +130,11 @@ void AAuraCharacterBase::IncrementMinionCount_Implementation(int32 Amount)
 	MinionCount += Amount;
 }
 
+ECharacterClass AAuraCharacterBase::GetCharacterClass_Implementation() const
+{
+	return CharacterClass;
+}
+
 void AAuraCharacterBase::InitAbilityActorInfo()
 {
 }
@@ -159,6 +164,7 @@ void AAuraCharacterBase::AddCharacterAbilities()
 	if (!HasAuthority()) return;
 
 	AuraAsc->AddCharacterAbilities(StartupAbilities);
+	AuraAsc->AddCharacterPassiveAbilities(StartupPassiveAbilities);
 }
 
 void AAuraCharacterBase::Dissolve()

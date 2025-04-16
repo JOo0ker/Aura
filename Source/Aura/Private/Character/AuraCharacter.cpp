@@ -20,6 +20,8 @@ AAuraCharacter::AAuraCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
+
+	CharacterClass = ECharacterClass::Elementalist;
 }
 
 void AAuraCharacter::PossessedBy(AController* NewController)
@@ -37,6 +39,13 @@ void AAuraCharacter::OnRep_PlayerState()
 
 	// Init ability actor info for the Client
 	InitAbilityActorInfo();
+}
+
+void AAuraCharacter::AddToXP_Implementation(const int32 XP)
+{
+	const auto AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+	AuraPlayerState->AddToXP(XP);
 }
 
 int32 AAuraCharacter::GetPlayerLevel()

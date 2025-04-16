@@ -8,8 +8,10 @@
 #include "AuraGamePlayTags.h"
 #include "GameplayEffectExtension.h"
 #include "AbilitySystem/AuraAbilitySystemLibrary.h"
+#include "Aura/AuraLogChannels.h"
 #include "GameFramework/Character.h"
 #include "Interaction/CombatInterface.h"
+#include "Interaction/PlayerInterface.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "Net/UnrealNetwork.h"
@@ -129,8 +131,6 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
-		UE_LOG(LogTemp, Warning, TEXT("Changed Health on %s, Health: %f"), *Props.TargetAvatarActor->GetName(),
-		       GetHealth());
 	}
 	if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{
@@ -151,6 +151,8 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			{
 				if (const auto CombatInterface = Cast<ICombatInterface>(Props.TargetAvatarActor))
 					CombatInterface->Die();
+
+				SendXPEvent(Props);
 			}
 			else
 			{
@@ -163,6 +165,18 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			const bool bCritical = UAuraAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);
 
 			ShowFloatingText(Props, LocalIncomingDamage, bBlock, bCritical);
+		}
+	}
+	
+	if (Data.EvaluatedData.Attribute == GetInComingXPAttribute())
+	{
+		const float LocalIncomingXP = GetInComingXP();
+		SetInComingXP(0.f);
+
+		// TODO: See if we should level up
+		if (Props.SourceCharacter->Implements<UPlayerInterface>())
+		{
+			IPlayerInterface::Execute_AddToXP(Props.SourceCharacter, LocalIncomingXP);
 		}
 	}
 }
@@ -219,6 +233,22 @@ void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData
 			Props.TargetCharacter = Cast<ACharacter>(Props.TargetAvatarActor);
 			Props.TargetAsc = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Props.TargetAvatarActor);
 		}
+	}
+}
+
+void UAuraAttributeSet::SendXPEvent(const FEffectProperties& Props) const
+{
+	if (ICombatInterface* CombatInterface = Cast<ICombatInterface>(Props.TargetCharacter))
+	{
+		const int32 TargetLevel = CombatInterface->GetPlayerLevel();
+		const ECharacterClass TargetClass = ICombatInterface::Execute_GetCharacterClass(Props.TargetCharacter);
+		const int32 XPReward = UAuraAbilitySystemLibrary::GetXPRewardForClassAndLevel(Props.TargetCharacter, TargetClass, TargetLevel);
+
+		const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+		FGameplayEventData Payload;
+		Payload.EventTag = GameplayTags.AttributesMetaIncomingXP;
+		Payload.EventMagnitude = XPReward;
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Props.SourceCharacter, GameplayTags.AttributesMetaIncomingXP, Payload);
 	}
 }
 
