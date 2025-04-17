@@ -23,7 +23,7 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 {
 	const auto AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
 	AuraPlayerState->OnXPChangedDelegate.AddUObject(this, &UOverlayWidgetController::OnXPChanged);
-	
+	AuraPlayerState->OnLevelChangedDelegate.AddUObject(this, &UOverlayWidgetController::OnPlayerLevelChanged);
 	
 	const auto AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet);
 
@@ -87,8 +87,8 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 }
 
 void UOverlayWidgetController::OnInitializeStartupAbilities(UAuraAbilitySystemComponent* AuraAbilitySystemComponent)
-{
-	//TODO Get information about all given abilities, look up their Ability Info, and broadcast it to widget.
+	{
+		//TODO Get information about all given abilities, look up their Ability Info, and broadcast it to widget.
 	if (!AuraAbilitySystemComponent->bStartupAbilitiesGiven) return;
 
 	FForeachAbility BroadcastDelegate;
@@ -123,4 +123,9 @@ void UOverlayWidgetController::OnXPChanged(const int32 NewXP) const
 
 		OnXPPercentChangedDelegate.Broadcast(XPBarPercent);
 	}
+}
+
+void UOverlayWidgetController::OnPlayerLevelChanged(int32 NewLevel) const
+{
+	OnPlayerLevelChangedDelegate.Broadcast(NewLevel);
 }
