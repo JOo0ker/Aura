@@ -11,23 +11,20 @@
 
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 {
-	const auto AS = CastChecked<UAuraAttributeSet>(AttributeSet);
-	const auto AuraAttributeSet = CastChecked<UAuraAttributeSet>(AttributeSet);
 
-	for (const auto& Pair : AS->TagsToAttributes)
+	for (const auto& Pair : GetAuraAS()->TagsToAttributes)
 	{
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 			Pair.Value()).AddLambda(
-			[this, Pair, AS](const FOnAttributeChangeData& Data)
+			[this, Pair](const FOnAttributeChangeData& Data)
 			{
 				auto Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key);
-				Info.AttributeValue = Pair.Value().GetNumericValue(AS);
+				Info.AttributeValue = Pair.Value().GetNumericValue(GetAuraAS());
 				AttributeInfoDelegate.Broadcast(Info);
 			});
 	}
-
-	const auto AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
-	AuraPlayerState->OnAttributePointsChangedDelegate.AddLambda(
+	
+	GetAuraPS()->OnAttributePointsChangedDelegate.AddLambda(
 		[this](const int32 Points)
 		{
 			AttributePointsChangedDelegate.Broadcast(Points);
@@ -36,25 +33,22 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 
 void UAttributeMenuWidgetController::BroadcastInitialValues()
 {
-	const auto AS = CastChecked<UAuraAttributeSet>(AttributeSet);
 
 	check(AttributeInfo);
 
-	for (const auto& Pair : AS->TagsToAttributes)
+	for (const auto& Pair :  GetAuraAS()->TagsToAttributes)
 	{
 		auto Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key);
-		Info.AttributeValue = Pair.Value().GetNumericValue(AS);
+		Info.AttributeValue = Pair.Value().GetNumericValue( GetAuraAS());
 		AttributeInfoDelegate.Broadcast(Info);
 	}
-
-	const auto AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
-	AttributePointsChangedDelegate.Broadcast(AuraPlayerState->GetAttributePoints());
+	
+	AttributePointsChangedDelegate.Broadcast(GetAuraPS()->GetAttributePoints());
 }
 
 void UAttributeMenuWidgetController::UpgradeAttributes(const FGameplayTag& AttributeTag)
 {
-	const auto AuraASC = CastChecked<UAuraAbilitySystemComponent>(AbilitySystemComponent);
-	AuraASC->UpgradeAttributes(AttributeTag);
+	GetAuraASC()->UpgradeAttributes(AttributeTag);
 }
 
 void UAttributeMenuWidgetController::BroadcastAttributeInfo(const FGameplayTag& AttributeTag,
