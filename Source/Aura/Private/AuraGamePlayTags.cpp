@@ -46,6 +46,8 @@ FAuraGameplayTags::FAuraGameplayTags()
 	AURA_GAMEPLAY_INPUT_TAG_REG(2, "Input Tag for 2 Key.")
 	AURA_GAMEPLAY_INPUT_TAG_REG(3, "Input Tag for 3 Key.")
 	AURA_GAMEPLAY_INPUT_TAG_REG(4, "Input Tag for 4 Key.")
+	AURA_GAMEPLAY_INPUT_TAG_REG(Passive_1, "Input Tag for Passive Ability 1.")
+	AURA_GAMEPLAY_INPUT_TAG_REG(Passive_2, "Input Tag for Passive Ability 2.")
 
 	/*
 	 * Damage
@@ -66,6 +68,17 @@ FAuraGameplayTags::FAuraGameplayTags()
 	 */
 	AURA_GAMEPLAY_ABILITIES_TAG_REG(Attack, "Attack Ability Tag")
 	AURA_GAMEPLAY_ABILITIES_TAG_REG(Summon, "Summon Ability Tag")
+	AURA_GAMEPLAY_ABILITIES_TAG_REG(HitReact, "Hit React Ability1")
+	
+	AURA_GAMEPLAY_ABILITIES_STATUS_TAG_REG(Locked, "Locked Status")
+	AURA_GAMEPLAY_ABILITIES_STATUS_TAG_REG(Eligible, "Eligible Status")
+	AURA_GAMEPLAY_ABILITIES_STATUS_TAG_REG(UnLocked, "UnLocked Status")
+	AURA_GAMEPLAY_ABILITIES_STATUS_TAG_REG(Equipped, "Equipped Status")
+
+	AURA_GAMEPLAY_ABILITIES_TYPE_TAG_REG(Offensive, "Type Offensive")
+	AURA_GAMEPLAY_ABILITIES_TYPE_TAG_REG(Passive, "Type Passive")
+	AURA_GAMEPLAY_ABILITIES_TYPE_TAG_REG(None, "Type None")
+	
 	AURA_GAMEPLAY_ABILITIES_FIRE_TAG_REG(FireBolt, "FireBolt Ability Tag")
 
 	/*

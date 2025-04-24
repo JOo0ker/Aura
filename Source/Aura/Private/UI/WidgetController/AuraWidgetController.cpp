@@ -16,7 +16,7 @@ void UAuraWidgetController::SetWidgetControllerParams(const FWidgetControllerPar
 	AbilitySystemComponent = WCParams.AbilitySystemComponent;
 	AttributeSet = WCParams.AttributeSet;
 }
-
+a
 void UAuraWidgetController::BroadcastAbilityInfo()
 {
 	if (!GetAuraASC()->bStartupAbilitiesGiven) return;
@@ -26,6 +26,7 @@ void UAuraWidgetController::BroadcastAbilityInfo()
 	{
 		auto Info = AbilityInfo->FindAbilityInfoForTag(UAuraAbilitySystemComponent::GetAbilityTagFromSpec(AbilitySpec));
 		Info.InputTag = UAuraAbilitySystemComponent::GetInputTagFromSpec(AbilitySpec);
+		Info.StatusTag = UAuraAbilitySystemComponent::GetStatusFromSpec(AbilitySpec);
 		AbilityInfoDelegate.Broadcast(Info);
 	});
 
