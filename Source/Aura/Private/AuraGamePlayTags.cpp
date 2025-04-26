@@ -79,12 +79,15 @@ FAuraGameplayTags::FAuraGameplayTags()
 	AURA_GAMEPLAY_ABILITIES_TYPE_TAG_REG(Passive, "Type Passive")
 	AURA_GAMEPLAY_ABILITIES_TYPE_TAG_REG(None, "Type None")
 	
-	AURA_GAMEPLAY_ABILITIES_FIRE_TAG_REG(FireBolt, "FireBolt Ability Tag")
+	AURA_GAMEPLAY_ABILITIES_ATTACK_TAG_REG(Fire, FireBolt, "FireBolt Ability Tag")
+	AURA_GAMEPLAY_ABILITIES_ATTACK_TAG_REG(Lightning, Electrocute, "Electrocute Ability Tag")
+
 
 	/*
 	 * Cooldown
 	 */
-	AURA_GAMEPLAY_COOLDOWN_FIRE_TAG_REG(FireBolt, "FireBolt Cooldown Tag")
+	AURA_GAMEPLAY_COOLDOWN_TAG_REG(Fire, FireBolt, "FireBolt Cooldown Tag")
+	AURA_GAMEPLAY_COOLDOWN_TAG_REG(Lightning, Electrocute, "Electrocute Cooldown Tag")
 
 	/*
 	 * Combat Socket

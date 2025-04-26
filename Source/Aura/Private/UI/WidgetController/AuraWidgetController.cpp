@@ -16,7 +16,7 @@ void UAuraWidgetController::SetWidgetControllerParams(const FWidgetControllerPar
 	AbilitySystemComponent = WCParams.AbilitySystemComponent;
 	AttributeSet = WCParams.AttributeSet;
 }
-a
+
 void UAuraWidgetController::BroadcastAbilityInfo()
 {
 	if (!GetAuraASC()->bStartupAbilitiesGiven) return;
@@ -32,7 +32,7 @@ void UAuraWidgetController::BroadcastAbilityInfo()
 
 	GetAuraASC()->ForeachAbility(BroadcastDelegate);
 }
-
+ 
 AAuraPlayerController* UAuraWidgetController::GetAuraPC()
 {
 	if (AuraPlayerController == nullptr)

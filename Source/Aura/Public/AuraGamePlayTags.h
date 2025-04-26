@@ -96,19 +96,19 @@ FGameplayTag Name;
 #define AURA_GAMEPLAY_ABILITIES_STATUS_TAG_REG(Name, Tip)\
 	AURA_GAMEPLAY_TAG_REG_3(Abilities, Status, Name, Tip)
 
-// Abilities Fire
-#define AURA_GAMEPLAY_ABILITIES_FIRE_TAG_DECL(Name)\
-	AURA_GAMEPLAY_TAG_DECL_3(Abilities, Fire, Name)
+// Abilities Attack
+#define AURA_GAMEPLAY_ABILITIES_ATTACK_TAG_DECL(Category, Name)\
+	AURA_GAMEPLAY_TAG_DECL_3(Abilities, Category, Name)
 
-#define AURA_GAMEPLAY_ABILITIES_FIRE_TAG_REG(Name, Tip)\
-	AURA_GAMEPLAY_TAG_REG_3(Abilities, Fire, Name, Tip)
+#define AURA_GAMEPLAY_ABILITIES_ATTACK_TAG_REG(Category, Name, Tip)\
+	AURA_GAMEPLAY_TAG_REG_3(Abilities, Category, Name, Tip)
 
 // Cooldown
-#define AURA_GAMEPLAY_COOLDOWN_FIRE_TAG_DECL(Name)\
-	AURA_GAMEPLAY_TAG_DECL_3(Cooldown, Fire, Name)
+#define AURA_GAMEPLAY_COOLDOWN_TAG_DECL(Category, Name)\
+	AURA_GAMEPLAY_TAG_DECL_3(Cooldown, Category, Name)
 
-#define AURA_GAMEPLAY_COOLDOWN_FIRE_TAG_REG(Name, Tip)\
-	AURA_GAMEPLAY_TAG_REG_3(Cooldown, Fire, Name, Tip)
+#define AURA_GAMEPLAY_COOLDOWN_TAG_REG(Category, Name, Tip)\
+	AURA_GAMEPLAY_TAG_REG_3(Cooldown, Category, Name, Tip)
 
 
 // Montage
@@ -177,8 +177,11 @@ public:
 	AURA_GAMEPLAY_ABILITIES_TYPE_TAG_DECL(Passive);
 	AURA_GAMEPLAY_ABILITIES_TYPE_TAG_DECL(None);
 	
-	AURA_GAMEPLAY_ABILITIES_FIRE_TAG_DECL(FireBolt);
-	AURA_GAMEPLAY_COOLDOWN_FIRE_TAG_DECL(FireBolt);
+	AURA_GAMEPLAY_ABILITIES_ATTACK_TAG_DECL(Fire, FireBolt);
+	AURA_GAMEPLAY_COOLDOWN_TAG_DECL(Fire, FireBolt);
+
+	AURA_GAMEPLAY_ABILITIES_ATTACK_TAG_DECL(Lightning, Electrocute);
+	AURA_GAMEPLAY_COOLDOWN_TAG_DECL(Lightning, Electrocute);
 
 	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
 
