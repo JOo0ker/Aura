@@ -89,7 +89,7 @@ public:
 
 	virtual ~UAuraAttributeSet() override
 	{
-		UE_LOG(LogTemp, Display, TEXT("~UAuraAttributeSet()"));
+		
 	}
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
