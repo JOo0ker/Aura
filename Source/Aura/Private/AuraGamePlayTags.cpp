@@ -66,6 +66,7 @@ FAuraGameplayTags::FAuraGameplayTags()
 	/*
 	 * Abilities
 	 */
+	AURA_GAMEPLAY_ABILITIES_TAG_REG(None, "No Ability - like the nullptr for Ability Tags")
 	AURA_GAMEPLAY_ABILITIES_TAG_REG(Attack, "Attack Ability Tag")
 	AURA_GAMEPLAY_ABILITIES_TAG_REG(Summon, "Summon Ability Tag")
 	AURA_GAMEPLAY_ABILITIES_TAG_REG(HitReact, "Hit React Ability1")
