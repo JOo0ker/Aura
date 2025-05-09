@@ -7,16 +7,13 @@
 
 FAuraAbilityInfo UAbilityInfo::FindAbilityInfoForTag(const FGameplayTag& AbilityTag, bool bLogNotFound) const
 {
-	const auto Res = AbilitiesInformation.FindByPredicate(
-		[AbilityTag](const FAuraAbilityInfo& AbilityInfo)
+	for (const FAuraAbilityInfo& Info : AbilitiesInformation)
+	{
+		if (Info.AbilityTag == AbilityTag)
 		{
-			if (AbilityInfo.AbilityTag == AbilityTag)
-				return true;
-			return false;
-		});
-
-	if (Res)
-		return *Res;
+			return Info;
+		}
+	}
 
 	if (bLogNotFound)
 	{
